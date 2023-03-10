@@ -1,0 +1,63 @@
+To create a Docker container for a Laravel application, you will need to perform the following steps:
+
+Install Docker on your system if it is not already installed.
+Create a new directory for your Laravel project and navigate to it in the terminal.
+Run the following command to create a new Laravel project:
+ => composer create-project --prefer-dist laravel/laravel .
+
+Create a file called Dockerfile in the root directory of your Laravel project. 
+This file will contain the instructions for building the Docker image for your Laravel application. Add the following content to the Dockerfile:
+///
+FROM php:7.4-apache
+
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    zip \
+    unzip
+
+RUN docker-php-ext-install pdo_mysql zip
+
+COPY . /var/www/html
+
+RUN chown -R www-data:www-data /var/www/html
+
+RUN a2enmod rewrite
+
+EXPOSE 80
+////
+Create a file called docker-compose.yml in the root directory of your Laravel project. 
+This file will define the services that make up your application, including the web server and any databases that you need. Add the following content to the docker-compose.yml file:
+////
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+volumes:
+  db-data:
+/////
+Run the following command to build the Docker image for your Laravel application:
+////
+docker-compose build
+////
+Run the following command to start the Docker container for your Laravel application:
+////
+docker-compose up -d
+////
+This will start the web server and the database in separate Docker containers. You can access your Laravel application by visiting http://localhost in your web browser.

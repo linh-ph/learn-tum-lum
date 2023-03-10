@@ -1,0 +1,21 @@
+ function getCollectionQuery($isFrame, $id) {
+        return $isFrame ?  Frames::where('id', $id) : Collections::where('id', $id);
+    }
+
+///////
+
+    $query = getCollectionQuery($isFrame, $id);
+    $eagerLoading = is_null($eagerLoading) ? 'events' : $eagerLoading;
+
+    if ($query->whereHas($eagerLoading, function (Builder $query) {
+            $query->where('status', EventEnum::HAPPENING);
+        })->exists()) {
+            return StatusEnum::APPLYING;
+    }
+//// tách code $query ra có thể sử dụng ->clone(), hoặc orWhereHas
+    if ($query->orWhereHas($eagerLoading, function (Builder $query) {
+            $query->where('status', '!=', EventEnum::HAPPENING);
+        })->exists()) {
+            return StatusEnum::NOT_POSSIBLE;
+    }
+    return StatusEnum::NOT_APPLY;

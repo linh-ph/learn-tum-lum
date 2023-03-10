@@ -1,0 +1,108 @@
+import requests
+import csv
+arr = [
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/0F8JX0zaPs5n847yAIZPZR0lQ49V91qVOkqficWs.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/BqbETVRCp1Bs1g2mnnvasMDfZYKTniQIeZfeYAAx.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/pjybxsbegpa6IFaqnxDsTbrBdAJiNrDiiBBSeB9X.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/Dp2ESqwwpuMm5cbKXop8Acimu0hPdrmsPm0urySH.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/KeER4OZ5piIji7pZEa3KFZ4QUDkZZ2Xe5vCLLqtv.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/3kG77Z9bhLErYBpij7HwB3JBcbv4BtwFlYAgKtMr.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/PCnBkPBqMlEqumWY3Sc28xhaFnCboy4SaA5zENFL.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/epkKdCaBcsbZmRyaqWz0rbYax6s2ZoCQgPwEXYcd.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/Zt4w4tEU0MmOll0N6tYNfJFQcCsYFzi0rTyjHcDt.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/k1Rdxu9QZMv3Y1RkSWtg8wbBeqESB121BIYam4Jo.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/mXpUYXIAh4mAMwTXcL8ngT1zSMEZJ3JVCEJ9ddBk.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/k0qvqZLQeJnaMJD0M5TFCZJWi6f1CkJSGde5XJrF.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/SbYcV6lJJRt10sUOPBk6lYOe4GDQNtyc52GeuiH7.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/LD9lNFQRYYC32aXXN73J3prWPTVp1W802A57u5G5.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/6AHLTGcqjjn0ZkJP3wISTkEKbZgQjZu5g2rO9jVg.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/RldGvpQqMtIKNstQXUZarVHdjooHM5vrDlmfZdwa.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/PyXJzujUtKgWkXWnBglMbxmb6DojxKjCqaGfnOAc.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/x0DmlcI5iNojDg81dseU0pDHWI2cv3amdUX01AfT.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/YYTyOS2V2j3oLgs6LywlEwkKBS1bLGY9tgcwgdVS.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/rUval3slpyoURYoycCeh2JZqTxDipxsWpNjGlWbk.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/D0pgxg4tUsmlwU5LNX7dUBZAL6pnhIDvTzKr2KYl.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/uQbSJUPJxgag1oEOtkP0xRXldQmAJHzdfkw5jRZP.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/nl2A9scPDPdifvYwT6eFTJ39CnAu4BBM78fXKnxe.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/FjOdEGc2PRiv8DU6hVrsPG86mRNlEFb9qwDOJGmH.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/JeHNDh1khJR3gBj8hWaN1RaClqo7AnhrhLkzq7GH.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/Kj4AFUU3XReJrAKalGI6s43L74Za4Bco2zr9wirm.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/cnvy6k65LZRNWP8SiPitFqi26qhHAVHJaCcAzM1a.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/HAw6M5BhP7C3wiLItcaU71l1Ev2XPmEPqNLDbDO3.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/EVLCNiLcpfwuVdkBvovuUBX1fmdpYBFbfJQ5bLzL.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/WeBdloee88iKVfo8vSomtLEsqfRDUqrWMYcdbclE.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/1IfwPZ4Qilc49IRlDXyCiffYjcoiN3CYdvbMsPLs.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/yiuXrjcvJX57w2mtQEDxd7WAJVrTncRbgSo9B30d.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/A5jiHz53uduiqU48wRQ781aug0SeDPkmugo5qPli.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/pDAz1JFE7pbMC7iTmSSv64ByCyqdUq8HTclHe9g8.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/pm1JozW7AHrWGRrq6UUWtfat8jHKrbH7f6Q31lnM.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/ghJvvtFd9tL0TFz4XjNxMsZhyzhAqizkN1iKhs3X.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/wsQ97oIe9hvxzpgcJTJjQyJKDPI5ZyJQQjG3KGAk.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/gmZSqlA3OAODlecO9SB07wvipSOIqI7qia9pUmsz.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/6TZ6kBxRWFXkgGyzm8ZyALLwZPb0s6O9MY0cbFsj.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/fBQHjW7w5QoDyGa8lhbinfZZtft0l2YHAMiJqm1B.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/tKiTFhyZ4sdotHQtTHydCLYLTxW6xHBGB4vb8EFj.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/KM2dv1eX1GdGaH0ki8LYvSwUuyr9E2R2eo4tMb3C.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/h3ygEjMpE1Wfa9DbpGAMDGU6lwV7lZlP50EEw0lM.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/dno8Alv82yS1iU6JTLjgjDk3LGje0zlquzvyQXqx.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/BmUVhrnCBMXffDFAzhP4AvKFfNU1AnfJbPoxg6ij.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/n9rpWkKuYbaGeUYCPVlQZuqbeTGO7NLjerbE7Olu.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/kiMMhr3VVFgFrkQ25jC7jC9cUj3q91p56By48TAB.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/0jjlspYwuhBJi1FvoMYyMLkKZAGY8ncb7alNEbNM.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/hX50YZ5ouUpsoYJpFXodSvzdXLLLQsB4IUCNAnm9.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/V1ffrYAxUMHTju6WEjXqaPs4ANfeaHE6JGddyAgv.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/5ZkpwWUNKC0XYdJXyX0MS9BvHXFMatzckI81hxtL.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/WjGwWUa5ArhZCH7FL0cTXzOsZLYwGvtn29Iqhvtj.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/E3wOiELT1Gi0XjZbBYulUQUh6yOeRjy1UjZ8SdDb.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/NRksXIGo8pvoVdwFrabJ6DLNMDcfmTGLkk2uKyq3.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/fVlycadC7kPLNlQ8vcWFySYLYENNg72tun71AiS0.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/Tao7mHl4JJkcrT12DhdZVtjg2PpZLjmBvpW0k70O.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/gCKbzWgGjLzX0k3JPA30aPec7pnna6tg89mUDdhr.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/pxtGEhT3E9xIiO8H6J5ZNSvK1LubGaXV3niq6cQB.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/X3UgsQLOTgJR0DjLYMW9tOh97XAGqcaSoZLLRRPd.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/Yv4fcAamm0vbM7IT0kQlF3iQPo4Y5todbK7bTl3F.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/BDzeVRUefHfgnBzf2xFONHtr3r9Hd0yLhGCWXhu7.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/l4rTNDvoiwq4m9Kl85anFWhlIqu5XuYW9x5yavLj.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/kBU8zbLoqR25KtcQjYdMuKJaAExYYgLt2UcsSHut.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/o4vrqJX3FkTGtqaPGW75E3yeYlAHA1GD0GfxPDU2.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/Pj5JNuJa7a6XCP3tAhQu9tIxM9vNsrTv3OQHPiBQ.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/8U5jtYhrn7Ft0jrDXMy6OpZ5BNwyk44joeTrR0N0.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/cM30AnNJl7yyunkQB2DAdrPjGNZSqUJSOPQCiN1W.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/rz6hEFecjSyOMTjYhpgBH2v4B6HQLo5SQmszg8rv.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/eJw3d6hOTGMQ9G5gdRBLD7rFD9os5mnc6vhVx0it.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/W9gLSjMnzTd2JymtzXE245MAGxAdQwkKanMRuKq1.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/KKRYVUmhL9uuXhte3pOhVYK6zy0DXgPqkX5v1XqQ.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/PVa9170MyBSNa4LVAH46X9ox16ppc7oXesguiGSq.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/zLMIbAiv3pm8U0hs9vBTOsRGKJQvjcWtGFOBmVwv.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/kz6XlP9taZjen9k9mbo399I52FKAy3SXhPgvi0NJ.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/VygpBFTc2i4AL4Iqdji0ZJz8EWmS3tu67WD9SAqd.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/VSHtmWhhhqodgfx8nbrbJL8LwXtbc4NnuhtA3T6t.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/8aA7DxKkzuN0iWS3je6hXZWys6MEZ3UAs0C3q5Dl.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/NLCwgPPoR4w23RXNM0nFc5D4N1YTquCI3k8JeWP6.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/VWNKn5AkPFStfJuYfbkwATa1clfsek8V3QNcRPa6.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/NUf8wCI3ixt2d5WldkOjNCqfDtaai362Tc7GMp76.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/BPgz11thm8EprHtMqIjerDlEiwkGeexvlVh8lVV7.png",
+    "https://mycloset.aeon.com.vn/storage/admin/coordination/product/ZpCZaIXU9MhmF6IdXR3O5pCL2cDp6u0hlipF1qmX.png"
+]
+with open('image.csv') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    line_count = 0
+    for row in csv_reader:
+        print(row)
+        print('/')
+        # return row
+        # r = requests.get(", ".join(row))
+        # print(r.content) 
+
+# key = 1;
+# for img in arr:
+#     # URL of the image to be downloaded is defined as image_url
+#     r = requests.get(img) # create HTTP response object
+    
+#     # send a HTTP request to the server and save
+#     # the HTTP response in a response object called r
+#     with open("img_"+str(key)+".png",'wb') as f:  
+#         # write the contents of the response (r.content)
+#         f.write(r.content)
+
+#     key+=1
